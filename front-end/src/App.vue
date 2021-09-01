@@ -11,7 +11,7 @@
     <!-- footer -->
     <div class="footer">
       <p>Each Website made with &#10084; </p>
-      <p><a href="https://github.com/BYU-CS-260-Winter-2021/lab-5-photo-bomb-kingkellingson">https://github.com/BYU-CS-260-Winter-2021/lab-5-photo-bomb-kingkellingson</a></p>
+      <p><a href="https://github.com/kingkellingson/cp5.git">https://github.com/kingkellingson/cp5.git</a></p>
     </div>
   </div>
 </template>
