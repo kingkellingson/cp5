@@ -40,5 +40,5 @@ app.use("/api/photos", photos.routes);
 // app.use("/api/comments", comments.routes);
 
 
-app.listen(3001, () => console.log('Server listening on port 3001!'));
+app.listen(3005, () => console.log('Server listening on port 3005!'));
 
