@@ -196,7 +196,7 @@ export default {
             answersC: answersC,
             answersD: answersD,
             results: results,
-            c
+            user: this.user(),
           });
         }
         else {
