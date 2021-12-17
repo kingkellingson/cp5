@@ -55,7 +55,7 @@ export default {
       lastSurveyEdited: null,
     }
   },
-  created() {
+  async created() {
     this.getSurveys();
     try {
       let response = await axios.get('/api/users');
