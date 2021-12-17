@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 // connect to the mongodb database
-mongoose.connect('mongodb://localhost:27017/photobomb', {
+mongoose.connect('mongodb://localhost:27017/authsurvey', {
   useUnifiedTopology: true,
   useNewUrlParser: true
 });
@@ -36,6 +36,8 @@ const users = require("./users.js");
 app.use("/api/users", users.routes);
 const photos = require("./photos.js");
 app.use("/api/photos", photos.routes);
+const survey = require("./survey.js");
+app.use("/api/survey", survey.routes);
 // const comments = require("./comments.js");
 // app.use("/api/comments", comments.routes);
 

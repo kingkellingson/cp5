@@ -29,6 +29,12 @@ body {
   margin: 0px 200px;
 }
 
+@media screen and (max-width: 1100px) {
+  body {
+    margin: 0px 50px;
+  }
+}
+
 #header {
   /* Semi-circle */
   margin: 0 1em 1em 0;
@@ -42,7 +48,7 @@ body {
   left: 50%;
   transform: translate(-50%, 0);
   /* Color and alignment */
-  background: #e74c3c;
+  background: #F7B733;
   text-align: center;
   box-shadow: 0 0 0 1em #FFF;
 }
@@ -70,6 +76,11 @@ h2 {
 .pure-button-primary {
   background-color: #277E8E;
 }
+
+.pure-button {
+  background-color: #277E8E;
+}
+
 
 /* Footer  */
 .footer {
