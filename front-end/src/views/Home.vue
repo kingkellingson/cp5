@@ -196,7 +196,7 @@ export default {
             answersC: answersC,
             answersD: answersD,
             results: results,
-            user: this.user(),
+            user: this.$root.$data.user,
           });
         }
         else {
@@ -208,7 +208,7 @@ export default {
             answersC: answersC,
             answersD: answersD,
             results: results,
-            user: this.user(),
+            user: this.$root.$data.user,
           });
         }
         console.log("after axios"); 
