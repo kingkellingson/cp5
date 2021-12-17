@@ -84,9 +84,7 @@ export default {
       }
     },
     async generateSurvey(){
-        await axios.post("/api/survey/newSurvey", {
-          user: this.$root.$data.user,
-        });
+        await axios.post("/api/survey/newSurvey");
         this.getSurveys();
       },
     async getSurveys() {
