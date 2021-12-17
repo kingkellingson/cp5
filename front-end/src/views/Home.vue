@@ -90,7 +90,8 @@ export default {
       try {
         console.log("Trying to get surveys"); 
         let response = await axios.get('/api/survey/getSurveys');
-        console.log("GOT SURVEYS: " + response);
+        console.log("GOT SURVEYS: ");
+        console.log(response);
         this.surveys = response.data; 
         return true; 
       } catch (error) {
