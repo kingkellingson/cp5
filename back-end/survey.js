@@ -50,7 +50,7 @@ router.post('/create', validUser, async (req, res) => {
   }
   console.log(questions); 
   const survey = new Survey ({
-    user: req.user,
+    user: req.body.user,
     title: req.body.title,
     questions: questions,
     results: req.body.results,
