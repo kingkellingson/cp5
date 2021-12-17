@@ -200,6 +200,8 @@ export default {
           });
         }
         else {
+          console.log("USER is: ");
+          console.log(this.$root.$data.user);
           await axios.post('/api/survey/create', {
             title: newTitle,
             questions: questionsContent,

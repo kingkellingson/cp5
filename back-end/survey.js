@@ -14,7 +14,7 @@ const surveySchema = new mongoose.Schema({
       type: mongoose.Schema.ObjectId,
       ref: 'User'
     },
-    title: String,
+    mytitle: String,
     questions : { type : Array , "default" : [] },
     results: { type : Array , "default" : [] },
   });
@@ -51,7 +51,7 @@ router.post('/create', validUser, async (req, res) => {
   console.log(questions); 
   const survey = new Survey ({
     user: req.body.user,
-    title: req.body.title,
+    mytitle: req.body.title,
     questions: questions,
     results: req.body.results,
   });
@@ -70,7 +70,7 @@ router.post('/create', validUser, async (req, res) => {
 router.post('/newSurvey', async (req, res) => {
   console.log("Calling Post");
   const survey = new Survey ({
-    title: "**Generated Survey**",
+    mytitle: "**Generated Survey**",
     results: [
       "You are a fun person to be around!",
       "You hate pancakes!", 
@@ -282,7 +282,7 @@ router.put('/edit/:id', async (req, res) => {
       questions.push(question); 
     }
     console.log(questions); 
-    survey.title = req.body.title
+    survey.mytitle = req.body.title
     survey.questions = questions
     survey.results = req.body.results
     
