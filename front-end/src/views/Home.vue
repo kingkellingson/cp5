@@ -9,9 +9,10 @@
     <br>
     <div class="suggestions" v-if="suggestions.length > 0">
     <div class="survey-options" v-for="survey in suggestions" :key="survey.id">
-      <h2>{{survey.title}}</h2>
-      <button @click="toggleEditSurvey(survey)" class="ui button" id="survey">Edit</button>
-      <button @click="deleteSurvey(survey)" class="ui button" id="survey-delete">Delete</button>
+      <h2>{{survey.mytitle}}</h2>
+      <button v-if="survey.user._id == user._id" @click="toggleEditSurvey(survey)" class="ui button" id="survey">Edit</button>
+      <button v-if="survey.user._id == user._id" @click="deleteSurvey(survey)" class="ui button" id="survey-delete">Delete</button>
+      <button v-else class="ui button" id="survey">Must be user "{{survey.user.firstName}}, {{survey.user.lastName}}" to Edit and Delete</button>
     </div>
     </div>
     <button @click="deleteAll" class="ui button" id="survey-delete">Delete All My Surveys</button>
