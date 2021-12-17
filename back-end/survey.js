@@ -21,7 +21,7 @@ const surveySchema = new mongoose.Schema({
   
   const Survey = mongoose.model('Survey', surveySchema);
 
-router.post('/create', async (req, res) => {
+router.post('/create', validUser, async (req, res) => {
   console.log("Posting new survey"); 
   let questions = []; 
   console.log(req.body);
@@ -50,6 +50,7 @@ router.post('/create', async (req, res) => {
   }
   console.log(questions); 
   const survey = new Survey ({
+    user: req.user,
     title: req.body.title,
     questions: questions,
     results: req.body.results,
@@ -207,22 +208,13 @@ router.post('/newSurvey', async (req, res) => {
   }
 });
 
-router.get('/getSurveys', async (req, res) => {
-  try {
-      let surveys = await Survey.find();
-      res.send(surveys); 
-  } catch (error) {
-    console.log(error);
-    res.sendStatus(500);
-  }
-})
-
+//get specific survey
 router.get('/getSurvey/:id', async (req, res) => {
   try {
       //console.log("Getting answers back end"); 
       let answer = await Survey.findOne({
         _id: req.params.id
-      });
+      }).populate('user');
       // console.log("Answer is: "); 
       // console.log(answer); 
       res.send(answer); 
@@ -232,6 +224,30 @@ router.get('/getSurvey/:id', async (req, res) => {
     //res.sendStatus(500);
   }
 });
+
+// //get my surveys
+// router.get('/getSurveys/my', async (req, res) => {
+//   try {
+//       let surveys = await Survey.find({
+//         user: req.user
+//       }).populate('user');
+//       res.send(surveys); 
+//   } catch (error) {
+//     console.log(error);
+//     res.sendStatus(500);
+//   }
+// })
+
+//get all surveys
+router.get('/getSurveys', async (req, res) => {
+  try {
+      let surveys = await Survey.find().populate('user');
+      res.send(surveys); 
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+})
 
 router.put('/edit/:id', async (req, res) => {
   console.log("in edit function")

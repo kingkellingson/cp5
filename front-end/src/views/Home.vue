@@ -90,6 +90,7 @@ export default {
       try {
         console.log("Trying to get surveys"); 
         let response = await axios.get('/api/survey/getSurveys');
+        console.log("GOT SURVEYS: " + response);
         this.surveys = response.data; 
         return true; 
       } catch (error) {
@@ -194,6 +195,7 @@ export default {
             answersC: answersC,
             answersD: answersD,
             results: results,
+            user: this.user(),
           });
         }
         else {
