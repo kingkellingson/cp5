@@ -34,8 +34,8 @@ app.use(cookieSession({
 // import the users module and setup its API path
 const users = require("./users.js");
 app.use("/api/users", users.routes);
-const photos = require("./photos.js");
-app.use("/api/photos", photos.routes);
+// const photos = require("./photos.js");
+// app.use("/api/photos", photos.routes);
 const survey = require("./survey.js");
 app.use("/api/survey", survey.routes);
 // const comments = require("./comments.js");
