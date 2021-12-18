@@ -1,47 +1,66 @@
 <template>
 <div class="home">
-  <div class="menu" v-if="user">
-    <p>Welcome!</p>
-    <h2>{{user.firstName}} {{user.lastName}} <a @click="logout"><i class="fas fa-sign-out-alt"></i></a></h2>
+  <div class="home-display" v-if="user">
+    <div class="menu" v-if="user">
+      <p>Welcome!</p>
+      <h2>{{user.firstName}} {{user.lastName}} <a @click="logout"><i class="fas fa-sign-out-alt"></i></a></h2>
+    </div>
+    <div class="surveyData">
+      <h1>Choose a survey to edit or create a new survey.</h1>
+      <br>
+      <div class="suggestions" v-if="suggestions.length > 0">
+      <div class="survey-options" v-for="survey in suggestions" :key="survey.id">
+        <div class="survey-options-title">
+          <h2>{{survey.mytitle}}</h2>
+          <h5>Created By: User "{{survey.user.firstName}}, {{survey.user.lastName}}"</h5>
+        </div>
+        <button v-if="survey.user.firstName == user.firstName" @click="toggleEditSurvey(survey)" class="ui button" id="survey">Edit</button>
+        <!-- <button @click="toggleEditSurvey(survey)" class="ui button" id="survey">Edit</button> -->
+        <button @click="deleteSurvey(survey)" class="ui button" id="survey-delete">Delete</button>
+        <!-- <button v-else class="ui button" id="survey">Must be user "{{survey.user.firstName}}, {{survey.user.lastName}}" to Edit and Delete</button> -->
+        
+      </div>
+      </div>
+      <br><br><br>
+      <div class="button-holder">
+        <button v-if="user" @click="generateSurvey" class="ui button">Generate Example Survey</button>
+        <div class="createSurveyChoice">
+          <button v-if="user" @click="createSurvey = true" class="ui button" id="survey-create">Create New Survey</button>
+        </div> 
+        <button @click="deleteAll" class="ui button" id="survey-delete">Delete All My Surveys</button>
+      </div>
+      
+      <div class="createSurvey" v-if="createSurvey">
+        <hr>
+        <form id="createSurveyForm">
+          <label for="title">Survey Title:  </label>
+          <input type="text" id="title" name="title" value="Practice Survey"><br><br> 
+        </form>
+        <div class="button-holder">
+          <button @click="addQuestion" type="button" class="ui button" id="addQ">Add Question</button> <br><br>
+          <button @click="addResult" type="button" class="ui button" id="addR">Add Result</button> <br><br>
+        </div>
+        <form id="createSurveyFormPart2">
+        </form>
+        <button @click="postSurvey()" class="ui button" id="survey">Submit</button>
+      </div>
+    </div>
+    <p v-if="error">{{error}}</p>
   </div>
-  <div class="surveyData">
-    <h1>Choose a survey to edit or create a new survey.</h1>
-    <br>
-    <div class="suggestions" v-if="suggestions.length > 0">
-    <div class="survey-options" v-for="survey in suggestions" :key="survey.id">
-      <h2>{{survey.mytitle}}</h2>
-      <button v-if="survey.user._id == user._id" @click="toggleEditSurvey(survey)" class="ui button" id="survey">Edit</button>
-      <button v-if="survey.user._id == user._id" @click="deleteSurvey(survey)" class="ui button" id="survey-delete">Delete</button>
-      <button v-else class="ui button" id="survey">Must be user "{{survey.user.firstName}}, {{survey.user.lastName}}" to Edit and Delete</button>
-    </div>
-    </div>
-    <button @click="deleteAll" class="ui button" id="survey-delete">Delete All My Surveys</button>
-    <button @click="generateSurvey" class="ui button">Generate Example Survey</button>
-    <div class="createSurveyChoice">
-      <button @click="createSurvey = true" class="ui button" id="survey-create">Create New Survey</button>
-    </div> 
-    <div class="createSurvey" v-if="createSurvey">
-      <hr>
-      <form id="createSurveyForm">
-        <label for="title">Survey Title:  </label>
-        <input type="text" id="title" name="title" value="Practice Survey"><br><br> 
-      </form>
-      <button @click="addQuestion" type="button" class="ui button" id="addQ">Add Question</button> <br><br>
-      <form id="createSurveyFormPart2">
-      </form>
-      <button @click="addResult" type="button" class="ui button" id="addR">Add Result</button> <br><br>
-      <button @click="postSurvey()" class="ui button" id="survey">Submit</button>
-    </div>
-  </div>
-  <p v-if="error">{{error}}</p>
+  <Login v-else />
 </div>
+
 </template>
 
 
 <script>
 import axios from 'axios';
+import Login from '@/components/Login.vue';
 export default {
   name: 'Home',
+  components: {
+    Login,
+  },
   data() {
     return {
       surveys: [],
@@ -59,7 +78,9 @@ export default {
   async created() {
     this.getSurveys();
     try {
+      console.log("before error"); 
       let response = await axios.get('/api/users');
+      console.log("after error"); 
       this.$root.$data.user = response.data.user;
     } catch (error) {
       this.$root.$data.user = null;
@@ -84,7 +105,9 @@ export default {
       }
     },
     async generateSurvey(){
-        await axios.post("/api/survey/newSurvey");
+        await axios.post("/api/survey/newSurvey", {
+          user: this.$root.$data.user,
+        });
         this.getSurveys();
       },
     async getSurveys() {
@@ -421,7 +444,7 @@ export default {
 
 <style scoped>
 
-.home {
+.home-display {
   padding: 120px;
   /* display: flex; */
   justify-content: center;
@@ -441,6 +464,26 @@ export default {
   justify-content: space-between; 
 }
 
+.survey-options-title {
+  display: flex;
+  flex-direction: column;
+}
+
+h2 {
+  font-size: 17px;
+  padding-top: 10px; 
+  padding-right: 15px; 
+  margin-bottom: 0;
+}
+
+.survey-options-title > h5{
+  text-align: center;
+  padding-left: 5px;
+  font-size: 11px;
+  margin-top: 8px;
+  margin-bottom: 10px;
+}
+
 .survey-create {
   margin: 10px; 
   margin-top: 20px; 
@@ -455,9 +498,16 @@ export default {
   background-color: #FC4A1A; 
 }
 
+.createSurvey {
+  /* width: 100%; */
+  margin: 50px auto;
+  text-align: center;
+  align-items: center;
+}
+
 h1 {
   color: black;
-  font-size: 20px;
+  font-size: 25px;
 }
 
  .ui.button:focus{
@@ -469,6 +519,15 @@ h1 {
   margin: 10px; 
 }
 
+.button-holder {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 15px;
+  width: 100%;
+}
+
 .menu {
   display: flex;
   justify-content: space-between;
@@ -476,12 +535,8 @@ h1 {
 
 .menu h2 {
   font-size: 14px;
-}
-
-h2 {
-  font-size: 14px;
-  padding-top: 10px; 
-  padding-right: 15px; 
+  margin-top: 0;
+  padding-top: 0;
 }
 
 hr {

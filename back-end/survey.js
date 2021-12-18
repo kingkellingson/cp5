@@ -67,9 +67,10 @@ router.post('/create', validUser, async (req, res) => {
 })
 
 // Add Survey to Database
-router.post('/newSurvey', async (req, res) => {
+router.post('/newSurvey', validUser, async (req, res) => {
   console.log("Calling Post");
   const survey = new Survey ({
+    user: req.body.user,
     mytitle: "**Generated Survey**",
     results: [
       "You are a fun person to be around!",

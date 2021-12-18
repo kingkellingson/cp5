@@ -1,11 +1,15 @@
 <template>
 
 <div class="surveyHolder">
-
+  <div class="menu" v-if="user">
+    <p>Welcome!</p>
+    <h2>{{user.firstName}} {{user.lastName}} <a @click="logout"><i class="fas fa-sign-out-alt"></i></a></h2>
+  </div>
   <h2>Choose a survey to take:</h2>
   <div class="survey-chooser">
   <div class="survey-options" v-for="survey in surveys" :key="survey.id">
-    <button @click="chooseSurvey(survey)" class="ui button" id="survey-choice">{{survey.title}}</button>
+    <button @click="chooseSurvey(survey)" class="ui button" id="survey-choice">{{survey.mytitle}}</button>
+    <h5>Created By: User "{{survey.user.firstName}}, {{survey.user.lastName}}"</h5>
   </div>
   <hr>
   </div>
@@ -66,9 +70,14 @@ export default {
       result: null,
     }//test
   },
-  created() {
+  async created() {
     this.getSurveys();
-    
+    try {
+      let response = await axios.get('/api/users'); 
+      this.$root.$data.user = response.data.user;
+    } catch (error) {
+      this.$root.$data.user = null;
+    }
   },
   computed:{
     isLastQuestion () {
@@ -76,9 +85,20 @@ export default {
     },
     resultCalculated () {
       return this.result != null; 
-    }
+    },
+    user() {
+      return this.$root.$data.user;
+    },
   },
   methods: {
+    async logout() {
+      try {
+        await axios.delete("/api/users");
+        this.$root.$data.user = null;
+      } catch (error) {
+        this.$root.$data.user = null;
+      }
+    },
     incrementQuestionNum () {
       this.result = null;
       console.log("You clicked next!"); 
@@ -212,6 +232,23 @@ h2 {
   font-size: 18px; 
 }
 
+.survey-options > h5{
+  text-align: center;
+  padding-left: 5px;
+  font-size: 3dp;
+  margin-top: 0;
+}
+
+.menu {
+  display: flex;
+  justify-content: space-between;
+}
+
+.menu h2 {
+  font-size: 14px;
+  margin-top: 0;
+  padding-top: 0;
+}
 
 .surveyHolder {
   padding: 120px;
