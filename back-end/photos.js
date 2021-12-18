@@ -2,14 +2,7 @@ const mongoose = require('mongoose');
 const express = require("express");
 const router = express.Router();
 
-// Configure multer so that it will upload to '/public/images'
-const multer = require('multer')
-const upload = multer({
-  dest: '../front-end/public/images/',
-  limits: {
-    fileSize: 50000000
-  }
-});
+
 
 const users = require("./users.js");
 const User = users.model;
